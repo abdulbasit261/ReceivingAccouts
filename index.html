@@ -1,337 +1,706 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Bank Directory</title>
-    <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f4f6f9;
-            color: #333;
-            line-height: 1.6;
-        }
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0077ff, #0056b3);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        header img {
-            width: 50px;
-            height: auto;
-            margin-right: 15px;
-        }
-        header h1 {
-            font-size: 2rem;
-        }
-        section {
-            margin: 40px auto;
-            max-width: 1200px;
-            padding: 20px;
-        }
-        section h2 {
-            font-size: 2rem;
-            color: #0056b3;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .bank-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .bank-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .bank-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        .bank-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: fill;
-            padding: 30px;
-        }
-        .bank-card-content {
-            padding: 15px;
-            text-align: center;
-        }
-        .bank-card-content h3 {
-            font-size: 1.5rem;
-            color: #0077ff;
-            margin-bottom: 10px;
-        }
-        .bank-card-content button {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #0077ff, #0056b3);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-        .bank-card-content button:hover {
-            background: linear-gradient(135deg, #0056b3, #0047a3);
-            transform: scale(1.05);
-        }
-        footer {
-            background: #0056b3;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            margin-top: 40px;
-        }
-        footer p {
-            font-size: 1rem;
-        }
-        .details {
-            display: none;
-            margin-top: 10px;
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 6px;
-        }
-        .copy-button {
-            margin-top: 10px;
-            background-color: #28a745;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Global Bank Directory — Pro</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --accent1: #0066ff;
+    --accent2: #0047a3;
+    --glass: rgba(255,255,255,0.06);
+    --glass-2: rgba(255,255,255,0.04);
+    --success: #28a745;
+    --radius: 14px;
+    --container: 1200px;
+  }
+
+  *{box-sizing: border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background: linear-gradient(180deg, #e9f1ff 0%, #f7fbff 30%, #f4f6f9 100%);
+    color:#0b1220;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.45;
+  }
+
+  /* Top nav / hero */
+  .site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    backdrop-filter: blur(6px);
+    background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border-bottom: 1px solid rgba(11,18,32,0.04);
+  }
+
+  .header-inner{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:14px 20px;
+    display:flex;
+    gap:18px;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .logo {
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .logo img{width:48px;height:48px;border-radius:8px;object-fit:cover;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+  .logo h1{font-size:18px;margin:0;color:var(--accent2);letter-spacing:0.1px}
+  .logo p{margin:0;font-size:12px;color:var(--muted)}
+
+  nav.controls{display:flex;gap:12px;align-items:center}
+  .select, .input {
+    display:flex;align-items:center;gap:8px;background:var(--card);padding:8px;border-radius:10px;border:1px solid rgba(11,18,32,0.06);
+    box-shadow:0 4px 14px rgba(12,23,50,0.03);
+  }
+
+  .input input{
+    border:0;outline:none;font-size:14px;padding:6px 8px;background:transparent;
+    min-width:220px;
+  }
+
+  .select select{
+    border:0;outline:none;background:transparent;font-size:14px;padding:6px 8px;
+  }
+
+  /* Hero stripe */
+  .hero {
+    max-width:var(--container);
+    margin:22px auto 12px;
+    padding:18px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    border-radius:14px;
+    background: linear-gradient(90deg, rgba(0,102,255,0.12), rgba(0,71,163,0.06));
+    box-shadow: 0 12px 40px rgba(2,6,23,0.06);
+  }
+  .hero .title {flex:1}
+  .hero h2{margin:0;font-size:20px;color:var(--accent2)}
+  .hero p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+  /* Grid */
+  main{max-width:var(--container);margin:18px auto;padding:0 20px 60px}
+  .sections {
+    display:grid;
+    gap:36px;
+  }
+
+  .country {
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), #fff);
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow: 0 12px 30px rgba(9,20,40,0.04);
+    border: 1px solid rgba(11,18,32,0.03);
+    overflow:visible;
+  }
+
+  .country-header {
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .country-header img{width:44px;height:28px;object-fit:cover;border-radius:4px;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+  .country-header h3{margin:0;font-size:18px;color:var(--accent2)}
+  .country-header p{margin:0;color:var(--muted);font-size:13px}
+
+  .bank-list {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+  }
+
+  /* Card */
+  .bank-card{
+    background:linear-gradient(180deg, #fff, #fafcff);
+    border-radius:12px;
+    overflow:hidden;
+    border: 1px solid rgba(11,18,32,0.04);
+    transition: transform 300ms cubic-bezier(.2,.9,.2,1), box-shadow 300ms;
+    will-change: transform;
+    box-shadow: 0 10px 22px rgba(2,6,23,0.04);
+    display:flex;flex-direction:column;
+  }
+
+  .bank-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 22px 48px rgba(2,6,23,0.09);
+  }
+
+  .bank-media{
+    display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(180deg, rgba(0,102,255,0.04), rgba(0,71,163,0.02));
+    height:120px;
+  }
+  .bank-media img{max-width:140px;max-height:80px;object-fit:contain}
+
+  .bank-body{padding:14px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .bank-title{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .bank-title h4{margin:0;font-size:16px;color:var(--accent1)}
+  .bank-title .tag{font-size:12px;color:var(--muted);background:var(--glass);padding:6px 8px;border-radius:999px;border:1px solid rgba(11,18,32,0.03)}
+
+  .bank-actions{display:flex;gap:8px;margin-top:auto;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;box-shadow:0 8px 20px rgba(2,6,23,0.08);
+    transition:transform 160ms;
+  }
+  .btn.secondary{
+    background:transparent;color:var(--accent2);border:1px solid rgba(0,102,255,0.12);box-shadow:none;font-weight:600;
+  }
+  .btn:active{transform:translateY(1px)}
+
+  /* Details expand */
+  .details {
+    margin-top:10px;
+    background:var(--glass-2);
+    padding:12px;border-radius:10px;border:1px solid rgba(11,18,32,0.03);display:block;
+    overflow:hidden;max-height:0;transition:max-height 400ms cubic-bezier(.2,.9,.2,1),opacity 300ms;
+    opacity:0;
+  }
+  .details.open { max-height:420px; opacity:1; }
+
+  .detail-row{font-size:13px;color:#0b1220;margin:6px 0; display:flex;justify-content:space-between;gap:10px}
+  .detail-row strong{color:var(--muted);font-weight:600}
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    right: 20px;
+    bottom: 22px;
+    background: #0b1220;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    box-shadow: 0 12px 34px rgba(2,6,23,0.25);
+    opacity: 0;
+    transform: translateY(18px) scale(.98);
+    transition: all 320ms;
+    z-index: 200;
+    font-size: 14px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0) scale(1); }
+
+  /* Footer */
+  footer{ max-width:var(--container); margin:40px auto; padding:18px 20px; color:var(--muted); font-size:13px; text-align:center }
+
+  /* Small screens */
+  @media (max-width:720px){
+    .input input{min-width:120px}
+    .hero{flex-direction:column;align-items:flex-start;gap:10px}
+    .header-inner{padding:12px}
+  }
+
+  /* entrance animation */
+  .reveal {opacity:0; transform: translateY(18px); transition: transform 560ms cubic-bezier(.18,.8,.2,1), opacity 560ms}
+  .reveal.visible {opacity:1; transform:translateY(0)}
+</style>
 </head>
 <body>
-    <!-- USA Section -->
-    <header>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg" alt="USA Flag">
-        <h1>United States of America</h1>
-    </header>
 
-    <section>
-        <h2>Banks in USA</h2>
-        <div class="bank-list">
-            <div class="bank-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT83zoElBmVuoUH8LAR0C6bMyGWwX59sFJzIQ&s" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Citibank</h3>
-                    <button onclick="toggleDetails('citibank')">View Details</button>
-                    <div id="citibank" class="details">
-                        <p><strong>Bank Address:</strong> 111 Wall Street New York, NY 10043 USA</p>
-                        <p><strong>Routing (ABA):</strong> 031100209</p>
-                        <p><strong>SWIFT Code:</strong> CITIUS33</p>
-                        <p><strong>Account Number:</strong> 70580150001369504</p>
-                        <p><strong>Account Type:</strong> CHECKING</p>
-                        <p><strong>Beneficiary Name:</strong> Safia Bibi</p>
-                        <button class="copy-button" onclick="copyDetails('Routing (ABA): 031100209\nSWIFT Code: CITIUS33\nAccount Number: 70580150001369504\nAccount Type: CHECKING\nBeneficiary Name: Safia Bibi')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
+<!-- HEADER -->
+<div class="site-header" role="banner">
+  <div class="header-inner">
+    <div class="logo" aria-hidden>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Globe_icon.svg" alt="logo">
+      <div>
+        <h1>Global Bank Directory</h1>
+        <p>Fast • Secure • Animated</p>
+      </div>
+    </div>
+
+    <div class="controls" role="navigation" aria-label="Search and filters">
+      <div class="input" title="Search banks">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 21l-4.35-4.35" stroke="#667085" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#667085" stroke-width="1.6"/></svg>
+        <input id="globalSearch" placeholder="Search banks, IBAN, SWIFT, beneficiary..." aria-label="Search banks">
+      </div>
+
+      <div class="select" title="Filter by country">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M8 9l4-4 4 4M8 15l4 4 4-4" stroke="#667085" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <select id="countryFilter" aria-label="Filter by country">
+          <option value="all">All Countries</option>
+          <option value="USA">United States</option>
+          <option value="UK">United Kingdom</option>
+          <option value="Eurozone">Eurozone</option>
+          <option value="Australia">Australia</option>
+          <option value="Japan">Japan</option>
+          <option value="Pakistan">Pakistan</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" aria-hidden>
+  <div class="title">
+    <h2>Find bank transfer details — quickly & safely</h2>
+    <p>Click a card to view details. Use the search or country filter to narrow results. Copy details with one click.</p>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <button class="btn" onclick="document.getElementById('globalSearch').focus()">Search banks</button>
+    <button class="btn secondary" onclick="window.scrollTo({top:document.querySelector('main').offsetTop-30, behavior:'smooth'})">Browse directory</button>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="sections">
+
+    <!-- USA -->
+    <section class="country reveal" data-country="USA" id="USA">
+      <div class="country-header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg" alt="USA">
+        <div>
+          <h3>United States of America</h3>
+          <p>Major USD correspondent banks and details</p>
         </div>
+      </div>
+
+      <div class="bank-list">
+        <!-- Citibank -->
+        <article class="bank-card" data-name="Citibank citibank citius33 031100209">
+          <div class="bank-media">
+            <img src="https://logos-world.net/wp-content/uploads/2020/05/Citi-Logo.png" alt="Citibank">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>Citibank</h4>
+              <span class="tag">CHECKING</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">111 Wall Street, New York, NY 10043</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="citibank-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('Routing (ABA): 031100209\nSWIFT Code: CITIUS33\nAccount Number: 70580150001369504\nAccount Type: CHECKING\nBeneficiary Name: Safia Bibi')">Copy</button>
+            </div>
+
+            <div id="citibank-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Bank Address</strong><span>111 Wall Street, New York, NY 10043</span></div>
+              <div class="detail-row"><strong>Routing (ABA)</strong><span>031100209</span></div>
+              <div class="detail-row"><strong>SWIFT Code</strong><span>CITIUS33</span></div>
+              <div class="detail-row"><strong>Account Number</strong><span>70580150001369504</span></div>
+              <div class="detail-row"><strong>Account Type</strong><span>CHECKING</span></div>
+              <div class="detail-row"><strong>Beneficiary</strong><span>Safia Bibi</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('Routing (ABA): 031100209\nSWIFT Code: CITIUS33\nAccount Number: 70580150001369504\nAccount Type: CHECKING\nBeneficiary Name: Safia Bibi')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <!-- UK Section -->
-    <header>
-        <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="UK Flag">
-        <h1>United Kingdom</h1>
-    </header>
-
-    <section>
-        <h2>Banks in UK</h2>
-        <div class="bank-list">
-            <div class="bank-card">
-                <img src="https://www.openbanking.org.uk/wp-content/uploads/barclays.png" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Barclays</h3>
-                    <button onclick="toggleDetails('barclays')">View Details</button>
-                    <div id="barclays" class="details">
-                        <p><strong>Sort Code:</strong> 231486</p>
-                        <p><strong>Account Number:</strong> 15437061</p>
-                        <p><strong>Beneficiary Name:</strong> Safia Bibi</p>
-                        <button class="copy-button" onclick="copyDetails('Sort Code: 231486\nAccount Number: 15437061\nBeneficiary Name: Safia Bibi')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
+    <!-- UK -->
+    <section class="country reveal" data-country="UK" id="UK">
+      <div class="country-header">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="UK">
+        <div>
+          <h3>United Kingdom</h3>
+          <p>GBP / UK account details</p>
         </div>
+      </div>
+
+      <div class="bank-list">
+        <article class="bank-card" data-name="Barclays barclays sort code 231486 15437061">
+          <div class="bank-media">
+            <img src="https://www.openbanking.org.uk/wp-content/uploads/barclays.png" alt="Barclays">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>Barclays</h4>
+              <span class="tag">CHECKING</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">Barclays Bank — UK</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="barclays-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('Sort Code: 231486\nAccount Number: 15437061\nBeneficiary Name: Safia Bibi')">Copy</button>
+            </div>
+
+            <div id="barclays-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Sort Code</strong><span>23-14-86</span></div>
+              <div class="detail-row"><strong>Account Number</strong><span>15437061</span></div>
+              <div class="detail-row"><strong>Beneficiary</strong><span>Safia Bibi</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('Sort Code: 231486\nAccount Number: 15437061\nBeneficiary Name: Safia Bibi')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <!-- Eurozone Section -->
-    <header>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/EU_Flag_specification.svg" alt="Luxembourg Flag">
-        <h1>Eurozone</h1>
-    </header>
-
-    <section>
-        <h2>Banks in Eurozone</h2>
-        <div class="bank-list">
-            <div class="bank-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiUu9gp-trYb-W59aMjPPoEbZj5sFA83PTPA&s" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Banking Circle S.A.</h3>
-                    <button onclick="toggleDetails('bankingcircle')">View Details</button>
-                    <div id="bankingcircle" class="details">
-                        <p><strong>Bank Address:</strong> 2, Boulevard de la Foire L-1528 LUXEMBOURG</p>
-                        <p><strong>IBAN:</strong> LU214080000051332150</p>
-                        <p><strong>BIC:</strong> BCIRLULL</p>
-                        <p><strong>Beneficiary Name:</strong> Safia Bibi</p>
-                        <button class="copy-button" onclick="copyDetails('IBAN: LU214080000051332150\nBIC: BCIRLULL\nBeneficiary Name: Safia Bibi')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
+    <!-- EUROZONE -->
+    <section class="country reveal" data-country="Eurozone" id="Eurozone">
+      <div class="country-header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/EU_Flag_specification.svg" alt="EU flag">
+        <div>
+          <h3>Eurozone</h3>
+          <p>EUR / SEPA-ready accounts</p>
         </div>
+      </div>
+
+      <div class="bank-list">
+        <article class="bank-card" data-name="Banking Circle bankingcircle LU214080000051332150 BCIRLULL">
+          <div class="bank-media">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Banking_Circle_logo.png" alt="Banking Circle" onerror="this.src='https://via.placeholder.com/140x60?text=Bank'">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>Banking Circle S.A.</h4>
+              <span class="tag">IBAN</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">2, Boulevard de la Foire L-1528 LUXEMBOURG</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="bankingcircle-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('IBAN: LU214080000051332150\nBIC: BCIRLULL\nBeneficiary Name: Safia Bibi')">Copy</button>
+            </div>
+
+            <div id="bankingcircle-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Address</strong><span>2, Boulevard de la Foire L-1528 LUXEMBOURG</span></div>
+              <div class="detail-row"><strong>IBAN</strong><span>LU214080000051332150</span></div>
+              <div class="detail-row"><strong>BIC</strong><span>BCIRLULL</span></div>
+              <div class="detail-row"><strong>Beneficiary</strong><span>Safia Bibi</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('IBAN: LU214080000051332150\nBIC: BCIRLULL\nBeneficiary Name: Safia Bibi')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <!-- Australia Section -->
-    <header>
-        <img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Flag_of_Australia.svg" alt="Australia Flag">
-        <h1>Australia</h1>
-    </header>
-
-    <section>
-        <h2>Banks in Australia</h2>
-        <div class="bank-list">
-            <div class="bank-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT83zoElBmVuoUH8LAR0C6bMyGWwX59sFJzIQ&s" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Citibank</h3>
-                    <button onclick="toggleDetails('citibankaus')">View Details</button>
-                    <div id="citibankaus" class="details">
-                        <p><strong>Bank Address:</strong> 2 Park Street, Sydney NSW 2000</p>
-                        <p><strong>Branch Code (BSB):</strong> 248024</p>
-                        <p><strong>Account Number:</strong> 10545775</p>
-                        <p><strong>Beneficiary Name:</strong> Safia Bibi</p>
-                        <button class="copy-button" onclick="copyDetails('Branch Code (BSB): 248024\nAccount Number: 10545775\nBeneficiary Name: Safia Bibi')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Australia -->
+    <section class="country reveal" data-country="Australia" id="Australia">
+      <div class="country-header">
+        <img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Flag_of_Australia.svg" alt="Australia">
+        <div>
+          <h3>Australia</h3>
+          <p>AUD bank details</p>
         </div>
+      </div>
+
+      <div class="bank-list">
+        <article class="bank-card" data-name="Citibank australia citibank 248024 10545775">
+          <div class="bank-media">
+            <img src="https://logos-world.net/wp-content/uploads/2020/05/Citi-Logo.png" alt="Citibank Australia">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>Citibank (Australia)</h4>
+              <span class="tag">Savings</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">2 Park Street, Sydney NSW 2000</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="citibank-au-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('BSB: 248024\nAccount Number: 10545775\nBeneficiary: Safia Bibi')">Copy</button>
+            </div>
+
+            <div id="citibank-au-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Branch (BSB)</strong><span>248-024</span></div>
+              <div class="detail-row"><strong>Account Number</strong><span>10545775</span></div>
+              <div class="detail-row"><strong>Beneficiary</strong><span>Safia Bibi</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('Branch Code (BSB): 248024\nAccount Number: 10545775\nBeneficiary Name: Safia Bibi')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <!-- Japan Section -->
-    <header>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg" alt="Japan Flag">
-        <h1>Japan</h1>
-    </header>
-
-    <section>
-        <h2>Banks in Japan</h2>
-        <div class="bank-list">
-            <div class="bank-card">
-                <img src="https://www.bk.mufg.jp/global/shared/cmn/og_image.jpg" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>MUFG Bank, Ltd.</h3>
-                    <button onclick="toggleDetails('mufg')">View Details</button>
-                    <div id="mufg" class="details">
-                        <p><strong>Bank Address:</strong> 7-1 Marunouchi 2-Chome, Chiyoda-ku Tokyo, Japan</p>
-                        <p><strong>Bank Code:</strong> 0005</p>
-                        <p><strong>Branch Code:</strong> 869</p>
-                        <p><strong>Account Type:</strong> Savings / Futsu</p>
-                        <p><strong>Account Number:</strong> 4241254</p>
-                        <p><strong>Beneficiary Name:</strong> ﾍﾟｲｵﾆｱ ｼﾞﾔﾊﾟﾝ(ｶ</p>
-                        <button class="copy-button" onclick="copyDetails('Bank Code: 0005\nBranch Code: 869\nAccount Type: Savings / Futsu\nAccount Number: 4241254\nBeneficiary Name: ﾍﾟｲｵﾆｱ ｼﾞﾔﾊﾟﾝ(ｶ')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Japan -->
+    <section class="country reveal" data-country="Japan" id="Japan">
+      <div class="country-header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg" alt="Japan">
+        <div>
+          <h3>Japan</h3>
+          <p>Domestic JP bank details</p>
         </div>
+      </div>
+
+      <div class="bank-list">
+        <article class="bank-card" data-name="MUFG mufg bank code 0005 branch 869 4241254">
+          <div class="bank-media">
+            <img src="https://www.bk.mufg.jp/global/shared/cmn/og_image.jpg" alt="MUFG Bank" onerror="this.src='https://via.placeholder.com/140x60?text=MUFG'">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>MUFG Bank, Ltd.</h4>
+              <span class="tag">Savings</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">7-1 Marunouchi 2-Chome, Chiyoda-ku, Tokyo</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="mufg-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('Bank Code: 0005\nBranch Code: 869\nAccount Number: 4241254\nBeneficiary: ﾍﾟｲｵﾆｱ ｼﾞﾔﾊﾟﾝ(ｶ')">Copy</button>
+            </div>
+
+            <div id="mufg-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Bank Code</strong><span>0005</span></div>
+              <div class="detail-row"><strong>Branch Code</strong><span>869</span></div>
+              <div class="detail-row"><strong>Account Type</strong><span>Savings / Futsu</span></div>
+              <div class="detail-row"><strong>Account Number</strong><span>4241254</span></div>
+              <div class="detail-row"><strong>Beneficiary</strong><span>ﾍﾟｲｵﾆｱ ｼﾞﾔﾊﾟﾝ(ｶ</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('Bank Code: 0005\nBranch Code: 869\nAccount Type: Savings / Futsu\nAccount Number: 4241254\nBeneficiary Name: ﾍﾟｲｵﾆｱ ｼﾞﾔﾊﾟﾝ(ｶ')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <!-- Pakistan Section -->
-    <header>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg" alt="Pakistan Flag">
-        <h1>Pakistan</h1>
-    </header>
-
-    <section>
-        <h2>Banks in Pakistan</h2>
-        <div class="bank-list">
-            <div class="bank-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzGPcEnMJ_VCxyyOQFZ1WGC4nsFvXP8mK12A&s" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Easypaisa</h3>
-                    <button onclick="toggleDetails('easypaisa')">View Details</button>
-                    <div id="easypaisa" class="details">
-                        <p><strong>Account Number:</strong> 03328657885</p>
-                        <p><strong>Account Holder Name:</strong> Abdul Basit</p>
-                        <button class="copy-button" onclick="copyDetails('Account Number: 03328657885\nAccount Holder Name: Abdul Basit')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
-            <div class="bank-card">
-                <img src="https://zindigiprize.pk/assets/zindigi-GB.png" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Zindgi Wallet / JS Bank</h3>
-                    <button onclick="toggleDetails('zindgi')">View Details</button>
-                    <div id="zindgi" class="details">
-                        <p><strong>IBAN:</strong> PK03JSBL9999903328657885</p>
-                        <p><strong>Account Number:</strong> 03328657885</p>
-                        <p><strong>Account Holder Name:</strong> Abdul Basit</p>
-                        <button class="copy-button" onclick="copyDetails('IBAN: PK03JSBL9999903328657885\nAccount Number: 03328657885\nAccount Holder Name: Abdul Basit')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
-            <div class="bank-card">
-                <img src="https://brandlogovector.com/wp-content/uploads/2023/05/Upaisa-Logo-PNG.png" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Ubank / Upaisa</h3>
-                    <button onclick="toggleDetails('ubank')">View Details</button>
-                    <div id="ubank" class="details">
-                        <p><strong>Account Number:</strong> 03328657885</p>
-                        <p><strong>Account Holder Name:</strong> Safia Bibi</p>
-                        <button class="copy-button" onclick="copyDetails('Account Number: 03328657885\nAccount Holder Name: Safia Bibi')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
-            <div class="bank-card">
-                <img src="https://brandlogovector.com/wp-content/uploads/2021/09/Jazz-Cash-Logo.png" alt="Bank Image">
-                <div class="bank-card-content">
-                    <h3>Jazzcash</h3>
-                    <button onclick="toggleDetails('jazzcash')">View Details</button>
-                    <div id="jazzcash" class="details">
-                        <p><strong>Account Number:</strong> 03431175490</p>
-                        <p><strong>Account Holder Name:</strong> Abdul Basit</p>
-                        <button class="copy-button" onclick="copyDetails('Account Number: 03431175490\nAccount Holder Name: Abdul Basit')">Copy Details</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Pakistan -->
+    <section class="country reveal" data-country="Pakistan" id="Pakistan">
+      <div class="country-header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg" alt="Pakistan">
+        <div>
+          <h3>Pakistan</h3>
+          <p>Local wallets & bank accounts</p>
         </div>
+      </div>
+
+      <div class="bank-list">
+
+        <article class="bank-card" data-name="Easypaisa easypaisa 03328657885 Abdul Basit">
+          <div class="bank-media">
+            <img src="https://www.easypay.com.pk/assets/img/logos/easypaisa.png" alt="Easypaisa" onerror="this.src='https://via.placeholder.com/140x60?text=Easypaisa'">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>Easypaisa</h4>
+              <span class="tag">Wallet</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">Mobile wallet — Pakistan</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="easypaisa-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('Account Number: 03328657885\nAccount Holder Name: Abdul Basit')">Copy</button>
+            </div>
+
+            <div id="easypaisa-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Account Number</strong><span>03328657885</span></div>
+              <div class="detail-row"><strong>Account Holder</strong><span>Abdul Basit</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('Account Number: 03328657885\nAccount Holder Name: Abdul Basit')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="bank-card" data-name="Zindgi zindigi js bank PK03JSBL9999903328657885 03328657885 Abdul Basit">
+          <div class="bank-media">
+            <img src="https://zindigiprize.pk/assets/zindigi-GB.png" alt="Zindgi" onerror="this.src='https://via.placeholder.com/140x60?text=Zindgi'">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>Zindgi Wallet / JS Bank</h4>
+              <span class="tag">IBAN</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">JS Bank linked wallet</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="zindgi-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('IBAN: PK03JSBL9999903328657885\nAccount Number: 03328657885\nAccount Holder Name: Abdul Basit')">Copy</button>
+            </div>
+
+            <div id="zindgi-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>IBAN</strong><span>PK03JSBL9999903328657885</span></div>
+              <div class="detail-row"><strong>Account Number</strong><span>03328657885</span></div>
+              <div class="detail-row"><strong>Account Holder</strong><span>Abdul Basit</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('IBAN: PK03JSBL9999903328657885\nAccount Number: 03328657885\nAccount Holder Name: Abdul Basit')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="bank-card" data-name="Ubank upaisa 03328657885 Safia Bibi">
+          <div class="bank-media">
+            <img src="https://brandlogovector.com/wp-content/uploads/2023/05/Upaisa-Logo-PNG.png" alt="Ubank/Upaisa" onerror="this.src='https://via.placeholder.com/140x60?text=Upaisa'">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>Ubank / Upaisa</h4>
+              <span class="tag">Wallet</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">Mobile wallet</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="ubank-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('Account Number: 03328657885\nAccount Holder Name: Safia Bibi')">Copy</button>
+            </div>
+
+            <div id="ubank-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Account Number</strong><span>03328657885</span></div>
+              <div class="detail-row"><strong>Account Holder</strong><span>Safia Bibi</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('Account Number: 03328657885\nAccount Holder Name: Safia Bibi')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="bank-card" data-name="Jazzcash 03431175490 Abdul Basit jazzcash">
+          <div class="bank-media">
+            <img src="https://brandlogovector.com/wp-content/uploads/2021/09/Jazz-Cash-Logo.png" alt="JazzCash" onerror="this.src='https://via.placeholder.com/140x60?text=JazzCash'">
+          </div>
+          <div class="bank-body">
+            <div class="bank-title">
+              <h4>JazzCash</h4>
+              <span class="tag">Wallet</span>
+            </div>
+
+            <p style="color:var(--muted);font-size:13px;margin:4px 0">Mobile wallet — Pakistan</p>
+
+            <div class="bank-actions">
+              <button class="btn" onclick="toggleDetails(this)" data-target="jazzcash-1">View Details</button>
+              <button class="btn secondary" onclick="copyDetails('Account Number: 03431175490\nAccount Holder Name: Abdul Basit')">Copy</button>
+            </div>
+
+            <div id="jazzcash-1" class="details" aria-hidden="true">
+              <div class="detail-row"><strong>Account Number</strong><span>03431175490</span></div>
+              <div class="detail-row"><strong>Account Holder</strong><span>Abdul Basit</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+                <button class="btn" onclick="copyDetails('Account Number: 03431175490\nAccount Holder Name: Abdul Basit')">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Global Bank Directory. All Rights Reserved.</p>
-    </footer>
+  </div>
+</main>
 
-    <script>
-        function toggleDetails(bankId) {
-            const details = document.getElementById(bankId);
-            if (details.style.display === "none" || details.style.display === "") {
-                details.style.display = "block";
-            } else {
-                details.style.display = "none";
-            }
+<!-- Toast -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- Footer -->
+<footer>&copy; <span id="year"></span> Global Bank Directory. All rights reserved.</footer>
+
+<script>
+  // Set year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        // reveal children cards with small delays
+        e.target.querySelectorAll('.bank-card').forEach((c, i) => {
+          setTimeout(()=> c.classList.add('visible'), i*90);
+        });
+      }
+    });
+  }, {threshold: 0.09});
+  reveals.forEach(r => obs.observe(r));
+
+  // Toggle details (slide)
+  function toggleDetails(btn){
+    const targetId = btn.getAttribute('data-target');
+    const el = document.getElementById(targetId);
+    if(!el) return;
+    const open = el.classList.toggle('open');
+    el.setAttribute('aria-hidden', !open);
+    // scroll if opened on small screens
+    if(open) {
+      setTimeout(()=> {
+        const rect = el.getBoundingClientRect();
+        if(rect.bottom > window.innerHeight) {
+          el.scrollIntoView({behavior:'smooth', block:'end'});
         }
+      }, 260);
+    }
+  }
 
-        function copyDetails(detailsText) {
-            const textarea = document.createElement('textarea');
-            textarea.value = detailsText;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            alert("Details copied to clipboard!");
-        }
-    </script>
+  // Copy to clipboard with toast
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(msg){
+    if(toastTimer) clearTimeout(toastTimer);
+    toast.textContent = msg;
+    toast.classList.add('show');
+    toastTimer = setTimeout(()=> toast.classList.remove('show'), 2500);
+  }
+
+  function copyDetails(text){
+    if(!navigator.clipboard){
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast('Copied to clipboard'); } catch(e){ showToast('Copy failed'); }
+      document.body.removeChild(ta);
+      return;
+    }
+    navigator.clipboard.writeText(text).then(()=> showToast('Copied to clipboard!') ).catch(()=> showToast('Copy failed'));
+  }
+
+  // Search + filter
+  const searchInput = document.getElementById('globalSearch');
+  const countryFilter = document.getElementById('countryFilter');
+
+  function applyFilter(){
+    const q = searchInput.value.trim().toLowerCase();
+    const country = countryFilter.value;
+    const cards = document.querySelectorAll('.bank-card');
+
+    cards.forEach(card => {
+      const name = (card.getAttribute('data-name')||'').toLowerCase();
+      const matchesQuery = q === '' || name.includes(q);
+      const parentCountry = card.closest('.country')?.getAttribute('data-country') || 'all';
+      const matchesCountry = country === 'all' || parentCountry === country;
+      card.style.display = (matchesQuery && matchesCountry) ? '' : 'none';
+    });
+  }
+
+  searchInput.addEventListener('input', applyFilter);
+  countryFilter.addEventListener('change', applyFilter);
+
+  // Keyboard accessibility: Enter on focused button toggles details
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && document.activeElement && document.activeElement.matches('.btn')){
+      document.activeElement.click();
+    }
+  });
+
+  // Make bank-card elements reveal nicely too
+  document.querySelectorAll('.bank-card').forEach(c=>{
+    c.classList.add('reveal');
+    setTimeout(()=> c.classList.add('visible'), 120);
+  });
+</script>
 </body>
 </html>
